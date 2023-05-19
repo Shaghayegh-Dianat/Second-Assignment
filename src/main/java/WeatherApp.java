@@ -2,14 +2,26 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.json.JSONObject;
 import java.util.Scanner;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 public class WeatherApp {
-    // Copy your API-KEY here
-    public final static String apiKey = "API-KEY";
-    // TODO: Write main function
-    public static void main(String[] args) {
+
+    public final static String apiKey = "90f03252d394468f8b6134838231305";
+
+    public static void main(String[] args){
+        Scanner input=new Scanner(System.in);
+        System.out.println("Enter the name of the city:");
+        String city=input.nextLine();
+        String JSONString = getWeatherData(city);
+        try {
+            JSONObject weatherObject = jsonParser(JSONString);
+            System.out.println("Temperature: " + getTemperature(weatherObject));
+            System.out.println("Humidity: " + getHumidity(weatherObject));
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 
@@ -39,14 +51,20 @@ public class WeatherApp {
     }
 
     // TODO: Write getTemperature function returns celsius temperature of city by given json string
-    public static double getTemperature(String weatherJson){
-        double answer = 0.0;
-        return answer;
+    public static double getTemperature(JSONObject weatherObject) {
+        JSONObject currentObject = (JSONObject) weatherObject.get("current");
+        double temperature = (double) currentObject.get("temp_c");
+        return temperature;
     }
 
     // TODO: Write getHumidity function returns humidity percentage of city by given json string
-    public static int getHumidity(String weatherJson){
-        int answer = 0;
-        return answer;
+    public static int getHumidity(JSONObject weatherObject){
+        JSONObject currentObject = (JSONObject) weatherObject.get("current");
+        int humidity = (int)(long) currentObject.get("humidity");
+        return humidity;
+    }
+    private static JSONObject jsonParser(String jsonStr) throws ParseException {
+        JSONParser parser = new JSONParser();
+        return (JSONObject) parser.parse(jsonStr);
     }
 }
