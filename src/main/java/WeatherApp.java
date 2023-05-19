@@ -14,10 +14,9 @@ public class WeatherApp {
         Scanner input=new Scanner(System.in);
         System.out.println("Enter the name of the city:");
         String city=input.nextLine();
-        String weatherJSONString = getWeatherData(city);
+        String JSONString = getWeatherData(city);
         try {
-            JSONObject weatherObject = jsonParser(weatherJSONString);
-
+            JSONObject weatherObject = jsonParser(JSONString);
             System.out.println("Temperature: " + getTemperature(weatherObject));
             System.out.println("Humidity: " + getHumidity(weatherObject));
         }catch (Exception e){
